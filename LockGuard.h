@@ -1,7 +1,8 @@
 #ifndef _LOCK_GUARD_H
 #define _LOCK_GUARD_H
 
-#include "DataTypes.h"
+#include <stdbool.h>
+#include <stdint.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -23,4 +24,4 @@ void LK_Unlock(LOCK_HANDLE hLock);
 }
 #endif
 
-#endif 
+#endif

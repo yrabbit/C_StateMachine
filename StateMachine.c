@@ -1,22 +1,22 @@
 #include "Fault.h"
 #include "StateMachine.h"
 
-// Generates an external event. Called once per external event 
+// Generates an external event. Called once per external event
 // to start the state machine executing
-void _SM_ExternalEvent(SM_StateMachine* self, const SM_StateMachineConst* selfConst, BYTE newState, void* pEventData)
+void _SM_ExternalEvent(SM_StateMachine* self, const SM_StateMachineConst* selfConst, uint8_t newState, void* pEventData)
 {
     // If we are supposed to ignore this event
-    if (newState == EVENT_IGNORED) 
+    if (newState == EVENT_IGNORED)
     {
         // Just delete the event data, if any
         if (pEventData)
             SM_XFree(pEventData);
     }
-    else 
+    else
     {
         // TODO - capture software lock here for thread-safety if necessary
 
-        // Generate the event 
+        // Generate the event
         _SM_InternalEvent(self, newState, pEventData);
 
         // Execute state machine based on type of state map defined
@@ -25,18 +25,18 @@ void _SM_ExternalEvent(SM_StateMachine* self, const SM_StateMachineConst* selfCo
         else
             _SM_StateEngineEx(self, selfConst);
 
-        // TODO - release software lock here 
+        // TODO - release software lock here
     }
 }
 
-// Generates an internal event. Called from within a state 
+// Generates an internal event. Called from within a state
 // function to transition to a new state
-void _SM_InternalEvent(SM_StateMachine* self, BYTE newState, void* pEventData)
+void _SM_InternalEvent(SM_StateMachine* self, uint8_t newState, void* pEventData)
 {
     ASSERT_TRUE(self);
 
     self->pEventData = pEventData;
-    self->eventGenerated = TRUE;
+    self->eventGenerated = true;
     self->newState = newState;
 }
 
@@ -64,7 +64,7 @@ void _SM_StateEngine(SM_StateMachine* self, const SM_StateMachineConst* selfCons
         self->pEventData = NULL;
 
         // Event used up, reset the flag
-        self->eventGenerated = FALSE;
+        self->eventGenerated = false;
 
         // Switch to the new current state
         self->currentState = self->newState;
@@ -85,7 +85,7 @@ void _SM_StateEngine(SM_StateMachine* self, const SM_StateMachineConst* selfCons
 // The state engine executes the extended state machine states
 void _SM_StateEngineEx(SM_StateMachine* self, const SM_StateMachineConst* selfConst)
 {
-    BOOL guardResult = TRUE;
+    bool guardResult = true;
     void* pDataTemp = NULL;
 
     ASSERT_TRUE(self);
@@ -110,14 +110,14 @@ void _SM_StateEngineEx(SM_StateMachine* self, const SM_StateMachineConst* selfCo
         self->pEventData = NULL;
 
         // Event used up, reset the flag
-        self->eventGenerated = FALSE;
+        self->eventGenerated = false;
 
         // Execute the guard condition
         if (guard != NULL)
             guardResult = guard(self, pDataTemp);
 
         // If the guard condition succeeds
-        if (guardResult == TRUE)
+        if (guardResult == true)
         {
             // Transitioning to a new state?
             if (self->newState != self->currentState)
@@ -130,8 +130,8 @@ void _SM_StateEngineEx(SM_StateMachine* self, const SM_StateMachineConst* selfCo
                 if (entry != NULL)
                     entry(self, pDataTemp);
 
-                // Ensure exit/entry actions didn't call SM_InternalEvent by accident 
-                ASSERT_TRUE(self->eventGenerated == FALSE);
+                // Ensure exit/entry actions didn't call SM_InternalEvent by accident
+                ASSERT_TRUE(self->eventGenerated == false);
             }
 
             // Switch to the new current state

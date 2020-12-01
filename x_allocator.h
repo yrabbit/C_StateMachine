@@ -1,10 +1,10 @@
 // https://www.codeproject.com/Articles/1272619/A-Fixed-Block-Memory-Allocator-in-C
 //
-// The x_allocator is a fixed block memory allocator that handles multiple 
-// block sizes by using two or more fb_allocator objects. Typically users 
-// create a thin wrapper module for each x_allocator managed memory blocks. 
+// The x_allocator is a fixed block memory allocator that handles multiple
+// block sizes by using two or more fb_allocator objects. Typically users
+// create a thin wrapper module for each x_allocator managed memory blocks.
 //
-// For example, create a XAllocData instance and wrapper functions 
+// For example, create a XAllocData instance and wrapper functions
 // in my_allocator.c:
 //
 // #define MAX_32_BLOCKS   10
@@ -20,7 +20,7 @@
 // ALLOC_DEFINE(myAllocator128, BLOCK_128_SIZE, MAX_128_BLOCKS)
 // ALLOC_DEFINE(myAllocator512, BLOCK_512_SIZE, MAX_512_BLOCKS)
 //
-// // An array of allocators sorted by smallest to largest block 
+// // An array of allocators sorted by smallest to largest block
 // static ALLOC_Allocator* allocators[] = {
 //    &myAllocator32Obj,
 //    &myAllocator128Obj,
@@ -63,7 +63,7 @@ typedef struct
     ALLOC_Allocator* const *allocators;
 
     // Number of allocator instances stored within the allocators array
-    const UINT16 maxAllocators;
+    const uint16_t maxAllocators;
 } XAllocData;
 
 void* XALLOC_Alloc(XAllocData* self, size_t size);

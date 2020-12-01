@@ -1,5 +1,5 @@
-// SMALLOC allocates either a 32 or 128 byte block depending 
-// on the requested size. 
+// SMALLOC allocates either a 32 or 128 byte block depending
+// on the requested size.
 
 #include "sm_allocator.h"
 #include "x_allocator.h"
